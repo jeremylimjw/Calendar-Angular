@@ -1,0 +1,78 @@
+<div style="padding: 10px; text-align: center;">
+    
+    <div class="calendar">
+
+        <div class="nav">
+            <div class="nav-content">
+                <button mat-icon-button (click)="incrementMonth(-1)">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+                <span class="month-text">{{ getMonthString(_calendar.value.getMonth()) }} {{ _calendar.value.getFullYear() }}</span>
+                <button mat-icon-button (click)="incrementMonth(1)">
+                    <mat-icon>chevron_right</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="header">SUN</div>
+            <div class="header">MON</div>
+            <div class="header">TUE</div>
+            <div class="header">WED</div>
+            <div class="header">THU</div>
+            <div class="header">FRI</div>
+            <div class="header">SAT</div>
+
+            <div class="cell" *ngFor="let cell of cells" (click)="handleCellClick(cell)"
+                [ngClass]="{ 
+                    'disabled': _calendar.value.getMonth() !== cell.month,
+                    'selected': cell.value === selectedStartDate?.getTime() || (selectedStartDate && selectedEndDate && cell.value >= selectedStartDate.getTime() && cell.value <= selectedEndDate.getTime())
+                }">
+
+                <div class="cell-content">
+
+                    <div class="day-text" [title]="cell.string"
+                        [ngClass]="{ 
+                            'disabled': _calendar.value.getMonth() !== cell.month, 
+                            'today': cell.string === today.toDateString() 
+                        }">
+                        {{ cell.day }}
+                    </div>
+                    
+                    <div class="task-container">
+                        <div class="task" *ngFor="let task of getTasks(cell)">
+                            {{ task.name }}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+        
+    <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; margin-top: 5px;">
+
+        <mat-form-field appearance="outline" style="margin-right: 5px;">
+            <mat-label>Select a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start date" [(ngModel)]="selectedStartDate">
+            <input matEndDate placeholder="End date" [(ngModel)]="selectedEndDate">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="margin-right: 5px;">
+            <mat-label>Task Name</mat-label>
+            <input matInput [(ngModel)]="newTaskName" autocomplete="off">
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" (click)="onSubmit()" style="margin-bottom: 18.8px;">Submit</button>
+
+    </div>
+
+</div>
+    
