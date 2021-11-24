@@ -1,6 +1,6 @@
 git checkout gh-pages
 git merge master
-call ng build --output-path docs --base-href /Calendar-Angular/
+call ng build --output-path docs --base-href /CalendarAngular/
 cd docs
 copy index.html 404.html
 cd ..
